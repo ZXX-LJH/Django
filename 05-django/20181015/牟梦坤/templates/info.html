@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <center>
+        <h3>
+           <p>{{ msg }}</p>,页面将在<span>3</span>秒后进行跳转,<br>
+            也可以手动点击链接进行跳转 <a href="{{ u }}">跳转</a>
+        </h3>
+
+    </center>
+    <script type="text/javascript">
+
+        setTimeout(function(){
+            location.href="{{ u }}"
+        },3000)
+    </script>
+</body>
+</html>
