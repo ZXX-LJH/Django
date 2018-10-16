@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>城市联动</title>
+</head>
+<body>
+    <select>
+        <option>--请选择--</option>
+        {% for v in citys %}
+        <option value="{{ v.id }}">{{ v.name }}</option>
+        {% endfor %}
+    </select>
+
+    <script type="text/javascript" src="/static/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        
+    // 获取页面中的 下拉选框 绑定change事件
+    $('select').live('change',function(){
+        // 获取当前选中的元素的 id
+        var id = $(this).val()
+
+        // 移除当前元素之后的所有元素
+        $(this).nextAll().remove()
+
+        // 发送ajax请求,获取下一级的数据
+        $.get('{% url "getcitys" %}',{'id':id},function(data){
+            // 判断返回的数据,如果为空,
+            if(data.length == 0){ return }
+       
+            // 动态创建一个下拉选框
+            var sel = $('<select></select>')
+            var ops = '<option>--请选择--</option>'
+            // 遍历获取的结果,拼接成option选项
+            for (var i = 0; i < data.length; i++) {
+                ops += '<option value="'+data[i]['id']+'">'+data[i].name+'</option>'
+            }
+            // 把拼接好的选项加入到下拉框中
+            sel.html(ops)
+            // 再把创建好的下拉框加入到页面中
+            $('body').append(sel)
+
+        },'json')
+    })
+
+    </script>
+</body>
+</html>

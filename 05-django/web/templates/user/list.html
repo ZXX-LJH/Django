@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员列表</title>
+</head>
+<body>
+    <center>
+        <table border="1" width="800" cellspacing="0">
+            <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>手机号</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>添加时间</th>
+                <th>操作</th>
+            </tr>
+            {% for v in ulist %}
+            <tr>
+                <td>{{ v.id }}</td>
+                <td>{{ v.username }}</td>
+                <td>{{ v.email }}</td>
+                <td>{{ v.phone }}</td>
+                <td>{{ v.age }}</td>
+                <td>
+                    {% if v.sex == '0' %}
+                        女
+                    {% else %}
+                        男
+                    {% endif %}
+                </td>
+                <td>{{ v.addtime|date:'Y-m-d H:i:s' }}</td>
+                <td>
+                    <a href="{% url 'userdel' v.id %}">删除</a>|
+                    <a href="{% url 'useredit' %}?uid={{ v.id }}">修改</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </center>
+</body>
+</html>
