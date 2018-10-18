@@ -19,6 +19,7 @@ from . import views
 urlpatterns = [
     #首页
     url(r'^$', views.index,name='myadmin_index'),
+
     # 会员添加
     url(r'^user/index/$', views.user_index, name='myadmin_user_index'),
     url(r'^user/index_edit/([0-9]+)/$', views.user_index_edit, name='myadmin_user_indexToedit'),
