@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
+    <title>标签首页</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -289,7 +289,7 @@
                                     <div class="am-form-group">
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <a href="{% url 'myadmin_user_add' %}" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</a>
+                                                <a href="{% url 'myadmin_cate_add' %}" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</a>
                                                 <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
                                                 <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
                                                 <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
@@ -325,51 +325,39 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>头像</th>
-                                                <th>用户名</th>
-                                                <th>手机号</th>
-                                                <th>邮箱</th>
-                                                <th>年龄</th>
-                                                <th>性别</th>
+                                                <th>标签</th>
+                                                <th>Ｐｉｄ</th>
+                                                <th>层级</th>
                                                 <th>状态</th>
-                                                <th>注册时间</th>
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for v in userlist %}
+                                            {% load pagetag %}
+                                            {% for v in cateslist %}
                                             <tr>
                                                 <td>{{ v.id }}</td>
-                                                <td>
-                                                    <img src="{{ v.pic_url }}" class="tpl-table-line-img" alt="">
-                                                </td>
-                                                <td class="am-text-middle">{{ v.username }}</td>
-                                                <td class="am-text-middle">{{ v.phone }}</td>
-                                                <td class="am-text-middle">{{ v.email }}</td>
-                                                <td class="am-text-middle">{{ v.age }}</td>
+{#                                                <td class="am-text-middle">{{ v.name }}</td>#}
+                                                <td class="am-text-middle"><span>{% ind v.path %}</span><span>{{ v.name }}</span></td>
+
+                                                <td class="am-text-middle">{{ v.pid }}</td>
+                                                <td class="am-text-middle">{{ v.path }}</td>
                                                 <td class="am-text-middle">
-                                                    {% if v.sex == '0' %}
-                                                        女
-                                                    {% else %}
-                                                        男
-                                                    {% endif %}
-                                                </td>
-                                                <td class="am-text-middle">
-                                                    {% if v.status == 0 %}
+                                                    {% if v.isdelete == True %}
+                                                        删除
+                                                    {% elif v.isDelete == False %}
                                                         正常
-                                                    {% elif v.status == 1 %}
-                                                        禁用
                                                     {% endif %}
                                                 </td>
-                                                <td class="am-text-middle">{{ v.addtime }}</td>
                                                 <td class="am-text-middle">
                                                     <div class="tpl-table-black-operation">
-                                                        <a href="{% url 'myadmin_user_edit' v.id %}">
-                                                            <i class="am-icon-pencil"></i> 编辑
-                                                        </a>
-                                                        <a href="{% url 'myadmin_user_delete' v.id %}" class="tpl-table-black-operation-del">
+{#                                                        <a href="{% url 'myadmin_cate_edit' v.id %}">#}
+{#                                                            <i class="am-icon-pencil"></i> 编辑#}
+{#                                                        </a> 采用ajax写 #}
+                                                        <a href="{% url 'myadmin_cate_delete' v.id %}" class="tpl-table-black-operation-del">
                                                             <i class="am-icon-trash"></i> 删除
                                                         </a>
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -377,6 +365,26 @@
 
                                         </tbody>
                                     </table>
+                                </div>
+
+                                <div class="am-u-lg-12 am-cf">
+                                    <div class="am-fr">
+                                        <ul class="am-pagination tpl-pagination">
+                                            <li class="am-disabled"><a href="#"> << </a></li>
+{#                                            <li class="am-active"><a href="#">1</a></li>#}
+
+
+{#                                            {% for i in userlist.paginator.page_range %}#}
+{#                                              <li><a href="?p={{ i }}">{{ i }}</a></li>#}
+{#                                            {% endfor %}#}
+
+                                            {% load pagetag %}
+
+                                            {% pageshow cateslist.paginator.num_pages request %}
+
+                                           <li class="am-disabled"><a href="#"> >> </a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div class="am-u-lg-12 am-cf">
 
@@ -390,9 +398,9 @@
 {#                                              <li><a href="?p={{ i }}">{{ i }}</a></li>#}
 {#                                            {% endfor %}#}
 
-                                            {% load pagetag %}
-
-                                            {% pageshow userlist.paginator.num_pages request %}
+{#                                            {% load pagetag %}#}
+{##}
+{#                                            {% pageshow userlist.paginator.num_pages request %}#}
 
                                            <li class="am-disabled"><a href="#"> >> </a></li>
                                         </ul>
@@ -408,6 +416,18 @@
     </div>
     <script src="/static/myadmin/js/amazeui.min.js"></script>
     <script src="/static/myadmin/js/app.js"></script>
+    <script>
+        # ajax 方式写编辑
+
+
+
+
+
+
+
+    </script>
+
+
 
 </body>
 

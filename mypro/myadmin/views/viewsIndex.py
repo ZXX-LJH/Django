@@ -3,9 +3,10 @@ from django.http import HttpResponse
 
 # Create your views here.
 from django.contrib.auth.hashers import make_password, check_password
-from . import models
+from .. import models
 from django.core.urlresolvers import reverse
 from mypro.settings import BASE_DIR
+
 import os
 
 
@@ -138,7 +139,7 @@ def user_index_edit(request, uid):
         # 更新头像
         user.pic_url = uploads(myfile)
     user.save()
-    return HttpResponse('<script>alert("删除成功");location.href="' + reverse('myadmin_user_index') + '"</script>')
+    return HttpResponse('<script>alert("修改成功");location.href="' + reverse('myadmin_user_index') + '"</script>')
 
 #　删除　　　＞＞　物理删除　｜　逻辑删除
 def user_delete(request, uid):
@@ -152,4 +153,3 @@ def user_delete(request, uid):
 
     # 故采用以下这种方式
     return HttpResponse('<script>alert("删除成功");location.href="' + reverse('myadmin_user_index') + '"</script>')
-

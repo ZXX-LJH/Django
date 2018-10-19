@@ -1,4 +1,4 @@
-"""web URL Configuration
+"""web URL Configuration 
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -14,19 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from . import views
+from .views import viewsCates,viewsGoods,viewsIndex
 
 urlpatterns = [
     #首页
-    url(r'^$', views.index,name='myadmin_index'),
+    url(r'^$', viewsIndex.index,name='myadmin_index'),
 
     # 会员添加
-    url(r'^user/index/$', views.user_index, name='myadmin_user_index'),
-    url(r'^user/index_edit/([0-9]+)/$', views.user_index_edit, name='myadmin_user_indexToedit'),
+    url(r'^user/index/$', viewsIndex.user_index, name='myadmin_user_index'),
+    url(r'^user/index_edit/([0-9]+)/$', viewsIndex.user_index_edit, name='myadmin_user_indexToedit'),
+    url(r'^user/add/$', viewsIndex.user_add, name='myadmin_user_add'),
+    url(r'^user/register/$', viewsIndex.user_register, name='myadmin_user_register'),
+    url(r'^user/edit/(?P<uid>[0-9]+)/$', viewsIndex.user_edit, name='myadmin_user_edit'),
+    url(r'^user/delete/(?P<uid>[0-9]+)/$', viewsIndex.user_delete, name='myadmin_user_delete'),
 
-    url(r'^user/add/$', views.user_add, name='myadmin_user_add'),
-    url(r'^user/register/$', views.user_register, name='myadmin_user_register'),
-    url(r'^user/edit/(?P<uid>[0-9]+)/$', views.user_edit, name='myadmin_user_edit'),
-    url(r'^user/delete/(?P<uid>[0-9]+)/$', views.user_delete, name='myadmin_user_delete'),
+    # 标签添加
+    url(r'^cate/index/$', viewsCates.cate_index, name='myadmin_cate_index'),
+    url(r'^cate/add/$', viewsCates.cate_add, name='myadmin_cate_add'),
+    url(r'^cate/delete/(?P<id>[0-9]+)/$', viewsCates.cate_delete, name='myadmin_cate_delete'),
+    url(r'^cate/edit/$', viewsCates.cate_edit, name='myadmin_cate_edit'),
 
 ]

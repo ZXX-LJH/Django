@@ -85,7 +85,9 @@ def pageshow(count,request):
 
 # ==================  拼接  template/myadmin/user/index.html 中的标签 pageshow 所需的内容  ========================
     res = ''
-    for i in range(begin, end):
+    print('begin' , begin)
+    print('end', end)
+    for i in range(begin, end+1):
         if i == p:
             res += '<li class="am-active"><a href="?p=' + str(p)   + '">' + str(p) + ' </a></li>'
         else:
@@ -146,3 +148,21 @@ def ShowPages(count, request):
         ps += '<li><a href="?p=' + str(p + 1) + res + '">»</a></li>'
 
     return format_html(ps)
+
+
+@register.simple_tag
+def ind(path): # 0,
+    # var = 'a,d,s,gsdad,sg'.split(',')
+    # print(var,type(var)) # ['a', 'd', 's', 'gsdad', 'sg'] <class 'list'>
+    res = path.split(',')
+    print(res) # ['0', '']
+    res = len(res) - 2
+    print(res)
+    res = res * "--->"
+
+    return res
+
+# ind("asdf")
+
+
+
