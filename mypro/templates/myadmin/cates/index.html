@@ -338,8 +338,10 @@
                                             <tr>
                                                 <td>{{ v.id }}</td>
 {#                                                <td class="am-text-middle">{{ v.name }}</td>#}
-                                                <td class="am-text-middle"><span>{% ind v.path %}</span><span>{{ v.name }}</span></td>
-
+                                                <td class="am-text-middle editname">
+                                                    <span>{% ind v.path %}</span>
+                                                    <span class = 'name'>{{ v.name }}</span>
+                                                </td>
                                                 <td class="am-text-middle">{{ v.pid }}</td>
                                                 <td class="am-text-middle">{{ v.path }}</td>
                                                 <td class="am-text-middle">
@@ -351,9 +353,10 @@
                                                 </td>
                                                 <td class="am-text-middle">
                                                     <div class="tpl-table-black-operation">
-{#                                                        <a href="{% url 'myadmin_cate_edit' v.id %}">#}
-{#                                                            <i class="am-icon-pencil"></i> 编辑#}
-{#                                                        </a> 采用ajax写 #}
+                                                        <a href="{% url 'myadmin_cate_edit' v.id %}">
+                                                            <i class="am-icon-pencil"></i> 编辑
+                                                        </a>
+
                                                         <a href="{% url 'myadmin_cate_delete' v.id %}" class="tpl-table-black-operation-del">
                                                             <i class="am-icon-trash"></i> 删除
                                                         </a>
@@ -386,26 +389,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="am-u-lg-12 am-cf">
 
-                                    <div class="am-fr">
-                                        <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#"> << </a></li>
-{#                                            <li class="am-active"><a href="#">1</a></li>#}
-
-
-{#                                            {% for i in userlist.paginator.page_range %}#}
-{#                                              <li><a href="?p={{ i }}">{{ i }}</a></li>#}
-{#                                            {% endfor %}#}
-
-{#                                            {% load pagetag %}#}
-{##}
-{#                                            {% pageshow userlist.paginator.num_pages request %}#}
-
-                                           <li class="am-disabled"><a href="#"> >> </a></li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -416,18 +400,41 @@
     </div>
     <script src="/static/myadmin/js/amazeui.min.js"></script>
     <script src="/static/myadmin/js/app.js"></script>
-    <script>
-        # ajax 方式写编辑
+    <script type="text/javascript">
+    //    alert('ajax')
+        // 给td绑定双击事件,进行修改
+        $('tbody .editname').dblclick(function(){
+            // 获取当前的分类名
+            var name = $(this).find('.name').text()
+            var cid = $(this).prev().text()
+            // 动态创建input,放到name的位置
+            var inp = $('<input value="'+name+'" style="color:black;">')
+            $(this).find('.name').html(inp)
+            inp.select()
+            var t = $(this)
 
-
-
-
-
+            // 给input绑定丧失焦点事件
+            inp.blur(function(){
+                // 获取当前input中修改的值
+                var xname = $(this).val()
+                // 判断新的值和原来的值是否一致
+                if(xname == name){
+                    // 恢复原样
+                    t.find('.name').html(name)
+                }else{
+                    // 发送ajax请求去修改
+                    // console.log(xname,cid)
+                    $.get('{% url "myadmin_cates_edit" %}',{'cid':cid,'name':xname},function(data){
+                        // 恢复原样
+                        t.find('.name').html(xname)
+                        alert(data['msg'])
+                    },'json')
+                }
+            })
+        })
 
 
     </script>
-
-
 
 </body>
 

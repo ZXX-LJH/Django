@@ -26,8 +26,8 @@ def user_index(request):
         return HttpResponse('<script>alert("数据库中未有数据,去注册");location.href="' + reverse('myadmin_user_add') + '"</script>')
 
     # ==================  搜索  ============================
-    types = request.GET.get('types',None)
-    keywords = request.GET.get('keyword',None)
+    types = request.GET.get('types', None)
+    keywords = request.GET.get('keyword', None)
     print(types)
     print(keywords)
     if types:
@@ -48,7 +48,7 @@ def user_index(request):
     # 实例化分页类        (需要分页的数据   , 每页显示的数据)
     paginator = Paginator(data, 10)
     # 获取请求的页数
-    p = request.GET.get('p',1)
+    p = request.GET.get('p', 1)
     # 获取请求页的数据
     userlist = paginator.page(p)
 
@@ -109,7 +109,7 @@ def user_edit(request, uid):
     data = models.Users.objects.get(id=uid)
     context = {'uinfo': data}
     # print(context)
-    return render(request,'myadmin/user/edit.html',context)
+    return render(request, 'myadmin/user/edit.html', context)
 
 # 修改 >> 接收 edit 提交的数据交由后台进行更新
 def user_index_edit(request, uid):

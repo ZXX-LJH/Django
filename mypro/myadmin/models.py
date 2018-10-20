@@ -7,6 +7,7 @@ if sys.getdefaultencoding() != default_encoding:
     sys.setdefaultencoding(default_encoding)
 
 # Create your models here.
+# 用户表
 class Users(models.Model):
     # 用户名 密码  手机号 邮箱 性别 年龄 头像 注册时间  状态
     username = models.CharField(max_length=50)
@@ -20,6 +21,7 @@ class Users(models.Model):
     status = models.IntegerField(default=0)
     addtime = models.DateTimeField(auto_now_add=True)
 
+# 标签表
 class Cates(models.Model):
     name = models.CharField(max_length=50)
     pid = models.IntegerField()
@@ -32,3 +34,21 @@ class Cates(models.Model):
     # 4 	女装		１		０，１，
     # 5		裙子		４		０，１，４，
     # 6		超短裙	５		０，１，４，５，
+
+
+
+# 商品表
+class Goods(models.Model):
+    title = models.CharField(max_length = 255)
+
+    cateid = models.ForeignKey(to = 'Cates')
+
+    price = models.FloatField()
+    store = models.IntegerField()
+    info = models.TextField()
+    pic_url = models.CharField(max_length = 100)
+    # 0 : 新发布  1 ： 热卖   2 ： 下架
+    status = models.IntegerField(default = 0)
+    clicknum = models.IntegerField(default = 0)
+    ordernum = models.IntegerField(default = 0)
+    addtime = models.TimeField(auto_now_add = True)

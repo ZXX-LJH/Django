@@ -150,19 +150,17 @@ def ShowPages(count, request):
     return format_html(ps)
 
 
+# 实现缩进效果
 @register.simple_tag
-def ind(path): # 0,
+def ind(path): # '0,'
     # var = 'a,d,s,gsdad,sg'.split(',')
     # print(var,type(var)) # ['a', 'd', 's', 'gsdad', 'sg'] <class 'list'>
     res = path.split(',')
-    print(res) # ['0', '']
+    # print(res) # ['0', '']　＃　ength = 2
     res = len(res) - 2
-    print(res)
+    # print(res)
     res = res * "--->"
 
     return res
 
 # ind("asdf")
-
-
-

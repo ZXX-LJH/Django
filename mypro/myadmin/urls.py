@@ -1,4 +1,4 @@
-"""web URL Configuration 
+"""web URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -32,6 +32,19 @@ urlpatterns = [
     url(r'^cate/index/$', viewsCates.cate_index, name='myadmin_cate_index'),
     url(r'^cate/add/$', viewsCates.cate_add, name='myadmin_cate_add'),
     url(r'^cate/delete/(?P<id>[0-9]+)/$', viewsCates.cate_delete, name='myadmin_cate_delete'),
-    url(r'^cate/edit/$', viewsCates.cate_edit, name='myadmin_cate_edit'),
+    url(r'^cate/edit/(?P<id>[0-9]+)/$', viewsCates.cate_edit, name='myadmin_cate_edit'),
+    url(r'^cates/edit/$', viewsCates.catesedit,name='myadmin_cates_edit'),  # 发送ajax请求去修改
+
+    # 商品添加
+    url(r'^good/index/$',viewsGoods.good_index,name = 'myadmin_good_index'),
+    url(r'^good/add/$',viewsGoods.good_add, name = 'myadmin_good_add'),
+    url(r'^good/edit/(?P<pid>[0-9]+)/$',viewsGoods.good_edit, name = 'myadmin_good_edit'),
+    url(r'^good/delete/(?P<pid>[0-9]+)/$',viewsGoods.good_delete, name = 'myadmin_good_delete'),
+
+
+
+
+
+
 
 ]
