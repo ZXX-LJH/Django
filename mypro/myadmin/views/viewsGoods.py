@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Q
 
+
 def good_index(request):
     from django.core.paginator import Paginator
 
@@ -20,11 +21,18 @@ def good_index(request):
     print(keywords)
     if types:
         if types == 'all':
-            data = data.filter(Q(title__contains=keywords)|Q(price__contains=keywords)|Q(store__contains=keywords)|Q(clicknum__contains=keywords)|Q(ordernum__contains=keywords))
+            data = data.filter(Q(title__contains=keywords)|Q(price__contains=keywords)|Q(info__contains=keywords)|Q(store__contains=keywords)|Q(clicknum__contains=keywords)|Q(ordernum__contains=keywords))
         elif types == 'status':
             # keywords == 禁用
             arr = {'新品': 0, '热卖':1,'下架':2}
             data = data.filter(status=arr[keywords])
+        elif types == 'price':
+            res = keywords.split('-')
+            # print(res)
+            data = data.filter(price__gt = int(res[0])).filter(price__lt = int(res[1]))
+        elif types == 'store':
+            res = keywords.split('-')
+            data = data.filter(store__gt = int(res[0])).filter(store__lt = int(res[1]))
         else:
             # data = data.filter(username__contains=keywords)
             search = {types + '__contains': keywords}
@@ -78,29 +86,35 @@ def good_add(request):
 def good_edit(request, pid):
     if request.method == 'GET':
         print('ceshi')
-        data = models.Goods.objects.get(id = pid)
-        context = {'goodlist':data}
+        data1 = models.Goods.objects.get(id = pid)
+        data2 = models.Cates.objects.extra(select = {'paths':'concat(path,id)'}).order_by('paths') # 是标签有序排列
+
+        context = {'goodlist':data1,'cateslist':data2}
         print('ceshi2')
         # return HttpResponse("good_edit")
         return render(request,'myadmin/goods/edit.html' , context)
     elif request.method =='POST':
-        good = models.Goods.objects.get(id = pid)
-        # goodinfo = request.POST.dict()
-        # goodinfo.pop('csrfmiddlewaretoken')
-        # for k, v in goodinfo.items():
-        #     good.k = v
+        try:
+            good = models.Goods.objects.get(id = pid)
+            # goodinfo = request.POST.dict()
+            # goodinfo.pop('csrfmiddlewaretoken')
+            # for k, v in goodinfo.items():
+            #     good.k = v
 
-        good.title = request.POST.get('title')
-        good.price = request.POST.get('price')
-        good.store = request.POST.get('store')
-        good.info = request.POST.get('info')
-        good.status = request.POST.get('status')
+            good.title = request.POST.get('title')
+            good.price = request.POST.get('price')
+            good.store = request.POST.get('store')
+            good.info = request.POST.get('info')
+            good.status = request.POST.get('status')
 
-        myfile = request.FILES.get('pic_url')
-        if myfile:
-            good.pic_url = uploads(myfile)
-        good.save()
-        return HttpResponse('<script>alert("修改成功！");location.href ="' + reverse('myadmin_good_index') + '"</script>')
+            myfile = request.FILES.get('pic_url')
+            if myfile:
+                good.pic_url = uploads(myfile)
+            good.save()
+            return HttpResponse('<script>alert("修改成功！");location.href ="' + reverse('myadmin_good_index') + '"</script>')
+        except:
+            return HttpResponse('<script>alert("修改失败！");location.href ="' + reverse('myadmin_good_edit') + '"</script>')
+
 
     # return HttpResponse("good_edit")
 

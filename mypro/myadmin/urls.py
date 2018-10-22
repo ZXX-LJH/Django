@@ -16,9 +16,16 @@ Including another URLconf
 from django.conf.urls import url
 from .views import viewsCates,viewsGoods,viewsIndex
 
+
+
+
 urlpatterns = [
     #首页
-    url(r'^$', viewsIndex.index,name='myadmin_index'),
+    url(r'^index$', viewsIndex.index,name='myadmin_index'),
+    url(r'^login/$', viewsIndex.myadminlogin, name = 'myadmin_login'),
+    url(r'^verifycode/$', viewsIndex.verifycode, name = 'myadmin_verifycode'),
+    url(r'^logout/$', viewsIndex.logout, name = 'myadmin_logout'),
+
 
     # 会员添加
     url(r'^user/index/$', viewsIndex.user_index, name='myadmin_user_index'),

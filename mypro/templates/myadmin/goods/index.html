@@ -301,13 +301,13 @@
                                 <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
                                     <div class="am-form-group tpl-table-list-select">
                                         <select name = 'types' data-am-selected="{btnSize: 'sm'}">
-                                          <option value="all">all</option>
-                                          <option value="title">title</option>
-                                          <option value="price">price</option>
-                                          <option value="store">store</option>
-                                          <option value="status">status</option>
-                                          <option value="clicknum">clicknum</option>
-                                          <option value="ordernum">ordernum</option>
+                                          <option value="all" >所有: all</option>
+                                          <option value="title" {% if request.GET.types == 'title' %} selected {% endif %}>名称: name</option>
+                                          <option value="price" {% if request.GET.types == 'price' %} selected {% endif %}>价格: 0-123</option>
+                                          <option value="store" {% if request.GET.types == 'store' %} selected {% endif %}>库存量: 0-123</option>
+                                          <option value="status" {% if request.GET.types == 'status' %} selected {% endif %}>状态: 新品|热卖|下架</option>
+                                          <option value="clicknum" {% if request.GET.types == 'clicknum' %} selected {% endif %}>点击量： 258</option>
+                                          <option value="ordernum" {% if request.GET.types == 'ordernum' %} selected {% endif %}>预定量： 258</option>
                                         </select>
                                     </div>
                                 </div>
@@ -315,7 +315,7 @@
                                     <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
                                         <input name = 'keywords' type="text" class="am-form-field ">
                                         <span class="am-input-group-btn">
-                                            <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" ></button>
+                                            <button id = 'search' class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" ></button>
                                           </span>
                                     </div>
                                 </div>
@@ -326,11 +326,11 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>title</th>
-                                                <!-- <th>标签</th> -->
+                                                <th>标签</th>
                                                 <th>价格</th>
-                                                <th>store</th>
+                                                <th>库存量</th>
                                                 <th>信息</th>
-                                                <th>图片链接</th>
+                                                <th>图片</th>
                                                 <th>状态</th>
                                                 <th>点击量</th>
                                                 <th>预定量</th>
@@ -345,7 +345,7 @@
                                             <tr>
                                                 <td>{{ v.id }}</td>
                                                 <td class="am-text-middle">{{ v.title }}</td>
-                                                <!-- <td class="am-text-middle">{{ v.Cate.name }}</td> -->
+                                                <td class="am-text-middle">{{ v.cateid.name }}</td>
                                                 <td class="am-text-middle">{{ v.price }}</td>
                                                 <td class="am-text-middle">{{ v.store }}</td>
                                                 <td class="am-text-middle">{{ v.info }}</td>
@@ -405,9 +405,30 @@
     <script src="/static/myadmin/js/app.js"></script>
 {#    <script src="/static/myadmin/js/jquery-1.8.3.min.js"></script>#}
     <script type="text/javascript">
-
-
-
+        // 给搜索按钮绑定单击事件
+        $('#search').click(function(){
+            // 获取选框的值
+            var v = $('select[name=types]').val()
+            // 判断类型
+            if(v == 'price'){
+                // 获取输入的关键字,检测是否正确
+                var k = $('input[name=keywords]').val()
+                var reg = /^(\d+|\d+\.\d+)-(\d+|\d+\.\d+)$/
+                if(!reg.test(k)){
+                    alert('输入的格式不正确,格式为:100-200')
+                    return false;
+                }
+            }
+            if(v == 'store'){
+                // 获取输入的关键字,检测是否正确
+                var k = $('input[name=keywords]').val()
+                var reg = /^(\d+|\d+\.\d+)-(\d+|\d+\.\d+)$/
+                if(!reg.test(k)){
+                    alert('输入的格式不正确,格式为:100-200')
+                    return false;
+                }
+            }
+        })
 
 
     </script>

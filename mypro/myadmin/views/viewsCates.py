@@ -86,11 +86,13 @@ def cate_edit(request, id):
         # 将数据返回给  edit.html 渲染
         return render(request, 'myadmin/cates/edit.html',{'cateinfo':data})
     elif request.method == "POST":
-        data = models.Cates.objects.get(id = id)
-        data.name = request.POST.get('name')
-        data.save()
-        return HttpResponse('<script>alert("修改成功");location.href="' + reverse('myadmin_cate_index') + '"</script>')
-
+        try:
+            data = models.Cates.objects.get(id = id)
+            data.name = request.POST.get('name')
+            data.save()
+            return HttpResponse('<script>alert("修改成功");location.href="' + reverse('myadmin_cate_index') + '"</script>')
+        except:
+            return HttpResponse('<script>alert("修改失败");location.href="' + reverse('myadmin_cate_edit') + '"</script>')
 
 # ajax
 def catesedit(request):
