@@ -25,7 +25,7 @@ SECRET_KEY = 'iba&3^d0gzmii6fhjq4f)r06#lw5+&deiwe@!1!ip!$4=43#($'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.2.16','127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -51,7 +51,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'myadmin.AdminLoginMiddleware.AdminLoginMiddleware'
+    'myadmin.AdminLoginMiddleware.AdminLoginMiddleware',
+
+    
 ]
 
 ROOT_URLCONF = 'mypro.urls'

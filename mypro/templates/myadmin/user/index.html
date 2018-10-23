@@ -48,8 +48,11 @@
                 <div class="am-fr tpl-header-navbar">
                     <ul>
                         <!-- 欢迎语 -->
+{#                        <li class="am-text-sm tpl-header-navbar-welcome">#}
+{#                            <a href="javascript:;">欢迎你, <span>Amaze UI</span> </a>#}
+{#                        </li>#}
                         <li class="am-text-sm tpl-header-navbar-welcome">
-                            <a href="javascript:;">欢迎你, <span>Amaze UI</span> </a>
+                            <a href="javascript:;">{% if request.session.AdminUser.username %}欢迎你, <span>{{ request.session.AdminUser.username }}</span> {% endif %} </a>
                         </li>
 
                         <!-- 新邮件 -->

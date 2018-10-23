@@ -46,7 +46,7 @@
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">年龄</label>
                             <div class="am-u-sm-9">
-                                <input type="text" name="age"  value="{{ uinfo.age }}" class="tpl-form-input"  placeholder="请输入年龄">
+                                <input type="text" name="age"  value="{% if uinfo.age %} {{ uinfo.age }} {% elif uinfo.age == None %} 0 {% endif %}" class="tpl-form-input"  placeholder="请输入年龄">
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -60,7 +60,7 @@
                                 </label>
                             </div>
                         </div>
-                        
+
                         <div class="am-form-group">
                             <label for="user-weibo" class="am-u-sm-3 am-form-label">
                                 头像
@@ -74,7 +74,7 @@
                                     <input name="pic_url" id="doc-form-file" type="file" multiple=""></div>
                             </div>
                         </div>
-                       
+
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
                                 <button class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button></div>

@@ -5,7 +5,7 @@
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   	<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-  	<title>魅族官网商城-提供魅族手机 PRO系列、MX系列、魅蓝（Note）系列的预约和购买</title>
+  	<title>魅族官网商城</title>
       <meta name="description" content="魅族在线商城是魅族面向全国服务的官方电商平台，提供魅族PRO系列、MX系列、魅蓝（Note）系列的手机、配件和智能硬件的预约和购买。官方正品，全场包邮。">
       <meta name="Keywords" content="魅族手机官网商城、魅族官方在线商店、魅族在线商城、魅族官网在线商店、魅族商城">
       <link href="/static/myhome/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
@@ -45,20 +45,20 @@
                   <i class="glyphicon glyphicon-user"></i>
                 </a>
                 <div class="layout-user-downmenu">
-                  <ul class="layout-user-downmenu-list">
-                    <li class="layout-user-downmenu-item">
-                      <a href="login.html" class="layout-user-downmenu-link">立即登录</a>
-                    </li>
-                    <li class="layout-user-downmenu-item">
-                      <a href="register.html" target="_blank" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_register">立即注册</a>
-                    </li>
-                    <li class="layout-user-downmenu-item">
-                      <a href="#" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_myorder">我的订单</a>
-                    </li>
-                    <li class="layout-user-downmenu-item">
-                      <a href="#" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_mformy">M码通道</a>
-                    </li>
-                  </ul>
+					<ul class="layout-user-downmenu-list">
+						<li class="layout-user-downmenu-item">
+							<a href="{% url 'myhome_login' %}" class="layout-user-downmenu-link">立即登录</a>
+						</li>
+						<li class="layout-user-downmenu-item">
+							<a href="{% url 'myhome_register' %}" target="_blank" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_register">立即注册</a>
+						</li>
+						<li class="layout-user-downmenu-item">
+							<a href="#" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_myorder">我的订单</a>
+						</li>
+						<li class="layout-user-downmenu-item">
+							<a href="#" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_mformy">M码通道</a>
+						</li>
+					</ul>
                 </div>
             </li>
             <li class="layout-header-service-item layout-header-service-cart" id="layoutHeaderCart">
@@ -286,274 +286,39 @@
 
     <!-- 头部 侧导航 -->
     <ul class="home-category hidden-xs hidden-sm" id="homeCategory">
+		{% for i in data %}
         <li class="home-category-item">
-          <a href="./list.html" class="home-category-link">
-              手机
+          <a href="#" class="home-category-link">
+              {{ i.name }}
           </a>
           <div class="home-category-child clearfix">
             <div class="home-category-child-list clearfix">
-              <a href="./meilanx.html" class="home-category-child-item title" title="魅族手机">
-                魅族手机
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav01.png" height="40" width="40">
-                <div class="home-category-child-text">PRO 7</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav02.png" height="40" width="40">
-                <div class="home-category-child-text">PRO 7 Plus</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav03.jpg" height="40" width="40">
-                <div class="home-category-child-text">PRO 6 Plus</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav04.png" height="40" width="40">
-                <div class="home-category-child-text">PRO 6s</div>
-              </a>
-
-              <a href="#" class="home-category-child-item title">
-                魅蓝手机
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav05.jpg" height="40" width="40">
-                <div class="home-category-child-text">魅蓝 A5</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav06.png" height="40" width="40">
-                <div class="home-category-child-text">魅蓝 E2</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav05.jpg" height="40" width="40">
-                <div class="home-category-child-text">魅蓝 5s</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav06.png" height="40" width="40">
-                <div class="home-category-child-text">魅蓝 Note5</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav05.jpg" height="40" width="40">
-                <div class="home-category-child-text">魅蓝 5</div>
-              </a>
-              <a class="home-category-child-item" href="#" target="_blank" >
-                <img class="home-category-child-img" src="/static/myhome/img/nav06.png" height="40" width="40">
-                <div class="home-category-child-text">魅蓝 X</div>
-              </a>
+			{% for ii in i.sub %}
+				<a href="#" class="home-category-child-item title" title="{{ ii.name }}">
+				{{ ii.name }}
+				</a>
+				{% for iii in  ii.goods_set.all %}
+				<a class="home-category-child-item" href="#" target="_blank" >
+				<img class="home-category-child-img" src="{{ iii.pic_url }}" height="40" width="40">
+				<div class="home-category-child-text">{{ iii.title }}</div>
+				</a>
+				{% endfor %}
+			{% endfor %}
             </div>
 
-          <div class="home-category-child-ad type1">
+          <!-- <div class="home-category-child-ad type1">
             <a href="#" class="home-category-child-ad-item">
               <img src="/static/myhome/img/nav001.jpg" alt="" class="home-category-child-ad-img">
             </a>
             <a href="#" class="home-category-child-ad-item">
               <img src="/static/myhome/img/nav002.jpg" alt="" class="home-category-child-ad-img">
             </a>
-          </div>
+          </div> -->
         </div>
       </li>
-      <li class="home-category-item">
-        <a href="#" class="home-category-link">
-            智能设备
-        </a>
-        <div class="home-category-child clearfix">
-          <div class="home-category-child-list clearfix">
-            <a href="#" class="home-category-child-item title">
-              智能健康
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav07.png" height="40" width="40">
-              <div class="home-category-child-text">乐心智能体脂秤</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav07.png" height="40" width="40">
-              <div class="home-category-child-text">乐心心率手环</div>
-            </a>
-            <a href="#" class="home-category-child-item title">
-              智能厨房
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav08.png" height="40" width="40">
-              <div class="home-category-child-text">沁麟智能靠谱煲</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav08.png" height="40" width="40">
-              <div class="home-category-child-text">智能调温养生壶</div>
-            </a>
-             <a href="#" class="home-category-child-item title">
-              智能娱乐
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav08.png" height="40" width="40">
-              <div class="home-category-child-text">魅族盒子</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav08.png" height="40" width="40">
-              <div class="home-category-child-text">魅族路由器 极速版</div>
-            </a>
-          </div>
-        </div>
-      </li>
-      <li class="home-category-item">
-        <a href="#" class="home-category-link">
-            智能穿戴
-        </a>
-        <div class="home-category-child clearfix">
-          <div class="home-category-child-list clearfix">
-            <a href="#" class="home-category-child-item title">
-              手环
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav09.png" height="40" width="40">
-              <div class="home-category-child-text">魅族手环</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav09.png" height="40" width="40">
-              <div class="home-category-child-text">乐心手环MAMBO 升级版</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav09.png" height="40" width="40">
-              <div class="home-category-child-text">Misfit 智能手环</div>
-            </a>
-            <a href="#" class="home-category-child-item title">
-              智能VR
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav09.png" height="40" width="40">
-              <div class="home-category-child-text">纽曼智能3D眼镜</div>
-            </a>
-          </div>
-        </div>
-      </li>
-      <li class="home-category-item">
-        <a href="#" class="home-category-link">
-            游戏设备
-        </a>
-        <div class="home-category-child clearfix">
-          <div class="home-category-child-list clearfix">
-            <a href="#" class="home-category-child-item title">
-              游戏手柄
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav010.png" height="40" width="40">
-              <div class="home-category-child-text">新游智能游戏手柄</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav010.png" height="40" width="40">
-              <div class="home-category-child-text">飞智蓝牙无线手柄</div>
-            </a>
-            <a href="#" class="home-category-child-item title">
-              游戏键鼠
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav010.png" height="40" width="40">
-              <div class="home-category-child-text">雷柏游戏鼠标V26</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav010.png" height="40" width="40">
-              <div class="home-category-child-text">雷柏游戏键盘V56</div>
-            </a>
-          </div>
-        </div>
-      </li>
-      <li class="home-category-item">
-        <a href="#" class="home-category-link">
-            数码影音
-        </a>
-        <div class="home-category-child clearfix">
-          <div class="home-category-child-list clearfix">
-            <a href="#" class="home-category-child-item title">
-              耳机
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav011.png" height="40" width="40">
-              <div class="home-category-child-text">MEIZU-Flow 三单元耳机</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav011.png" height="40" width="40">
-              <div class="home-category-child-text">魅族蓝牙运动耳机</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav011.png" height="40" width="40">
-              <div class="home-category-child-text">先锋蓝牙运动耳机</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav011.png" height="40" width="40">
-              <div class="home-category-child-text">魅族 EP2X耳机</div>
-            </a>
-            <a href="#" class="home-category-child-item title">
-              音箱
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav011.png" height="40" width="40">
-              <div class="home-category-child-text">魅族蓝牙小音箱</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav011.png" height="40" width="40">
-              <div class="home-category-child-text">Beats 蓝牙音响</div>
-            </a>
-          </div>
-        </div>
-      </li>
-      <li class="home-category-item">
-        <a href="#" class="home-category-link">
-            手机配件 / 移动电源
-        </a>
-        <div class="home-category-child clearfix">
-          <div class="home-category-child-list clearfix">
-            <a href="#" class="home-category-child-item title">
-              数据线
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav012.png" height="40" width="40">
-              <div class="home-category-child-text">Type-C数据线</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav012.png" height="40" width="40">
-              <div class="home-category-child-text">Micro USB数据线</div>
-            </a>
-            <a href="#" class="home-category-child-item title">
-              移动电源
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav012.png" height="40" width="40">
-              <div class="home-category-child-text">移动电源标准版</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav012.png" height="40" width="40">
-              <div class="home-category-child-text">小黄人版移动电源</div>
-            </a>
-          </div>
-        </div>
-      </li>
-      <li class="home-category-item">
-        <a href="#" class="home-category-link">
-            移动存储／办公设备
-        </a>
-        <div class="home-category-child clearfix">
-          <div class="home-category-child-list clearfix">
-            <a href="#" class="home-category-child-item title">
-              办公设备
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav013.png" height="40" width="40">
-              <div class="home-category-child-text">雷柏无线键鼠套装</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav013.png" height="40" width="40">
-              <div class="home-category-child-text">飞智蓝牙无线手柄</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav013.png" height="40" width="40">
-              <div class="home-category-child-text">雷柏无线办公鼠标</div>
-            </a>
-            <a class="home-category-child-item" href="#" target="_blank" >
-              <img class="home-category-child-img" src="/static/myhome/img/nav013.png" height="40" width="40">
-              <div class="home-category-child-text">雷柏触控静音鼠标</div>
-            </a>
-          </div>
-        </div>
-      </li>
-      <li class="home-category-item">
+	  {% endfor %}
+
+      <!-- <li class="home-category-item">
         <a href="#" class="home-category-link">
             生活周边
         </a>
@@ -583,7 +348,8 @@
             </a>
           </div>
         </div>
-      </li>
+      </li> -->
+
     </ul><!-- 头部 侧导航 E-->
     <!-- 头部 豆腐块 -->
     <div class="headDoufu hidden-xs hidden-sm">
@@ -2001,6 +1767,6 @@
    //
    leftNav();
   </script>
-
+ 
 </body>
 </html>

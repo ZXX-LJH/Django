@@ -16,31 +16,33 @@ def myadminlogin(request):
         # print('asd')
         return render(request, 'myadmin/login.html')
     elif request.method == 'POST':
-        # print("123456789")
+        print("123456789")
         if request.POST['verifycode'] != request.session['verifycode']:
             return HttpResponse('<script>alert("验证码输入错误");history.back(-1)</script>')
-
         if request.POST['username'] =='root' and request.POST['password'] == '123456':
-            request.session['AdminUser'] = {'username':'admin'}
+            request.session['AdminUser'] = {'username': 'admin'}
+            print(request.session['AdminUser'])
             return HttpResponse('<script>alert("登陆成功");location.href="' + reverse('myadmin_index') + '"</script>')
         else:
             return HttpResponse('<script>alert("登陆失败");location.href="' + reverse('myadmin_login') + '"</script>')
-        return HttpResponse('login')
+        # return HttpResponse('login')
 
 
 def logout(request):
-    request.session['AdminUser'] = ' '
+    request.session['AdminUser'] = ''
+    print('00000000', request.session['AdminUser'], '000000000000')
     return HttpResponse('<script>alert("退出登录");location.href="' + reverse('myadmin_login') + '"</script>')
 
 # 后台首页
 def index(request):
+    print(request.session['AdminUser'])
     return render(request, 'myadmin/index.html')
 
 def user_index(request):
     from django.core.paginator import Paginator
     # 获取所有数据
     data = models.Users.objects.all()
-    print('data: ', data)
+    # print('data: ', data)
 
     # 数据不存在
     # if data == None:  # 返回的是空的查询集 但不为 None
@@ -149,15 +151,19 @@ def user_index_edit(request, uid):
     user.email = data['email']
     user.age = data['age']
     user.sex = data['sex']
+    print('sssssssssssssssssssssssss')
+    print(user.pic_url)
+    print('sssssssssssssssssssssssss')
 
     # 头像
     myfile = request.FILES.get('pic_url')
     if myfile:
         # 如果修改了头像,要上传新的头像,并判断是否删除以前头像
         if user.pic_url != '/static/pics/user.jpg':
-            # 删除原来上传的头像
-            os.remove(BASE_DIR + user.pic_url)
-
+            # 数据库中没有头像
+            if user.pic_url:
+                # 删除原来上传的头像
+                os.remove(BASE_DIR + user.pic_url)
         # 更新头像
         user.pic_url = uploads(myfile)
     user.save()
