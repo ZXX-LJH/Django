@@ -1,16 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-
-# Create your views here.
 from django.contrib.auth.hashers import make_password, check_password
 from myadmin import models
 from django.core.urlresolvers import reverse
 from mypro.settings import BASE_DIR
-from django.contrib.auth.hashers import make_password, check_password
+from django.db.models import Q
+from django.core.paginator import Paginator
 import os
 
 
-# 后台首页
+# 前台首页
 def index(request):
     # 获取所有的以及分类
     data = models.Cates.objects.filter(pid = 0)
@@ -20,12 +19,73 @@ def index(request):
         i.sub = models.Cates.objects.filter(pid = i.id)
 
     context = {'data': data}
-
     return render(request, 'myhome/index.html', context)
-
+# 前台列表页
 def list(request):
+    cateid = request.GET.get('catetype') # 一级分类提交的数据
+    goodid = request.GET.get('goodtype') # 二级分类提交的数据
+    sortid = request.GET.get('sorttype') # 搜索分类提交的数据
+    print(cateid)
+    print(goodid)
+    print(sortid)
+
+    # 获取所有的商品信息
+    data1 = models.Goods.objects.all()  # 所有商品
+    # 获取所有的标签
+    data2 = models.Cates.objects.filter(pid = 0)  #　所有一级标签
+    for i in data2:
+        i.sub = models.Cates.objects.filter(pid = i.id) # 一级标签下嵌套所有二级标签
+
+    data3 = "" # 某一级标签下的所有子类标签
+    listvar1 =[]
+    if cateid == '0':  # 全部
+        pass
+    elif cateid:  # 如果点击了一级标签
+        # 获取请求 cateid 的所有子标签
+        data3 = models.Cates.objects.filter(pid = cateid)  # 传递给二级标签的数据
+        for i in data3:
+            for j in models.Goods.objects.filter(Q(cateid = i.id)):
+                listvar1.append(j)
+            # for i in len(listvar2):
+            #     listvar1.append(i)
+            # data1 = models.Goods.objects.filter(Q(cateid = i.id))
+        data1 = listvar1  # 指定一级标签下的指定二级标签
+        # print(listvar1)
+
+    if goodid:  # 如果点击了二级标签
+        data1 = models.Goods.objects.filter(cateid = goodid)  # 指定二级下的所有商品
+
+    # ======================  搜索  ====================
+    if sortid == 'index':
+        pass
+    elif sortid == 'new':
+        data1 = models.Goods.objects.filter(status = 0)
+    elif sortid == 'remai':
+        data1 = models.Goods.objects.filter(status = 1)
+    elif sortid == 'price':
+        data1 = models.Goods.objects.filter(price__gt = 0).order_by('price')
+        print('data1', data1)
+        if cateid:
+            for i in data3:
+                print('data2', data1)
+        if goodid:
+            data1 = data1.filter(cateid = goodid)
+            print('data3', data1)
+    elif sortid == 'clicknum':
+        data1 = models.Goods.objects.filter(clicknum__gt = 0).order_by(clicknum)
+    elif sortid == 'ordernum':
+        data1 = models.Goods.objects.filter(ordernum__gt = 0).order_by(ordernum)
+
+    # ======================  分页  ====================
+    paginator = Paginator(data1, 12)
+    p = request.GET.get('p', 1)
+    data1 = paginator.page(p)
+
+    context = {'goodslist':data1,'cateslist_one':data2, 'cateslist_two':data3, 'cateid':cateid,"goodid":goodid, 'sortid':sortid}
+    return render(request, 'myhome/list.html', context)
     return render(request, 'myhome/list.html')
 
+# 登录页
 def login(request):
     if request.method == 'GET':
         return render(request, 'myhome/login.html')
@@ -53,7 +113,36 @@ def cart(request):
     return render(request, 'myhome/cart.html')
 
 def meilanx(request):
-    return render(request, 'myhome/meilanx.html')
+    id = request.GET.get('id')
+    # print('id = ', id , type(id))
+    info = models.Goods.objects.filter(id = int(id))
+    # print(info, type(info))
+    context = {'goods': info,"id":id }
+    return render(request, 'myhome/meilanx.html', context)
+
+def cartadd(request):
+    # 商品id  商品数量 用户id
+    gid = request.GET.get('gid')
+    num = int(request.GET.get('num'))
+    uid = request.session['VipUser']['uid']
+
+    goods = models.Goods.objects.get(id = gid)
+    user = models.Users.objects.get(id = uid )
+
+    # 检查当前的商品是否已经存在购物车
+    res = models.Cart.objects.filter(uid = user).filter(goodsid = goods)
+    if res.count():
+        for i in res:  # 查询集  ==============  *** 有坑 *** =  =============
+            i.num += num
+            i.save()
+        print(gid, '****************************')
+    else:
+        cart = models.Cart(goodsid = goods, uid = user, num = num)
+        cart.save()
+        print(num, '****************************')
+
+    return JsonResponse({'error':0,'msg':'加入购物成功'})
+
 
 def order(request):
     return render(request, 'myhome/order.html')

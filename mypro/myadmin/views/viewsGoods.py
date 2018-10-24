@@ -38,7 +38,7 @@ def good_index(request):
             search = {types + '__contains': keywords}
             data = data.filter(**search)
 
-# ======================  分页  ====================
+    # ======================  分页  ====================
     paginator = Paginator(data, 10)
     # 获取请求的页数
     p = request.GET.get('p', 1)

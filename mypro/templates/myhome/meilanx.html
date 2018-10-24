@@ -192,18 +192,19 @@
      <!-- 面包屑 导航 E-->
     <!-- 产品购买 -->
     <div class="row">
+        {% for i in goods %}
       <div class="col-md-5 col-sm-12 col-xs-12">
         <div class="preview">
           <!-- Tab panes -->
           <div class="tab-content preview-booth pt10">
             <div role="tabpanel" class="tab-pane active mod-pic" id="list-p1">
-              <img  src="/static/myhome/img/mlx15.jpg" width="375" height="375"  class="sImg">
+              <img  src="{{ i.pic_url}}" width="375" height="375"  class="sImg">
             </div>
             <div role="tabpanel" class="tab-pane mod-pic" id="list-p2">
               <img  src="/static/myhome/img/mlx2.jpg" width="375" height="375" class="sImg">
             </div>
             <div role="tabpanel" class="tab-pane mod-pic" id="list-p3">
-              <img  src="/static/myhome/img/mlx3.jpg" width="375" height="375" class="sImg">
+              <img  src="{{ i.pic_url}}" width="375" height="375" class="sImg">
             </div>
           </div>
 
@@ -211,7 +212,7 @@
           <ul class="nav nav-tabs preview-thumb clearfix " role="tablist">
             <li role="presentation" class="active">
               <a href="#list-p1" aria-controls="list-p1" role="tab" data-toggle="tab">
-                <img  src="/static/myhome/img/mlx4.jpg" style="display: inline;" width="75" height="75">
+                <img  src="{{ i.pic_url}}" style="display: inline;" width="75" height="75">
               </a>
             </li>
             <li role="presentation">
@@ -221,18 +222,17 @@
             </li>
             <li role="presentation">
               <a href="#list-p3" aria-controls="list-p3" role="tab" data-toggle="tab">
-                <img  src="/static/myhome/img/mlx6.jpg" style="display: inline;" width="75" height="75">
+                <img  src="{{ i.pic_url}}" style="display: inline;" width="75" height="75">
               </a>
             </li>
           </ul>
-
         </div>
       </div>
       <div class="col-md-7 col-sm-12 col-xs-12 pt10">
         <div class="property hidden-xs hidden-sm" id="property">
              <div class="property-hd">
-                   <h1>魅蓝 X</h1>
-                   <p class="mod-info active">32G直降200元 原价1699元 高清屏安全快充 </p>
+                   <h1>{{ i.title }}</h1>
+                   <p class="mod-info active">{{ i.info }} </p>
              </div>
              <div class="property-sell">
                  <dl class="property-sell-price clearfix">
@@ -241,7 +241,7 @@
                      <dd>
                          <div class="mod-price">
                              <small>¥</small>
-                             <span id="J_price" class="vm-money">1499.00</span>
+                             <span id="J_price" class="vm-money">{{ i.price }}</span>
                          </div>
                          <div class="mod-original" id="J_originalPrice" style="display:none;"></div>
                          <div class="mod-activity">
@@ -465,6 +465,7 @@
           </div>
         </div>
       </div>
+      {% endfor %}
   </div>
     <!-- 产品购买 -->
     </div>
@@ -1010,5 +1011,30 @@
       //数量增加减少
       addMin();
     </script>
+    <script>
+    $('#J_btnBuy').click(function(){
+        //判断是否登录
+        var VipUser = '{{ request.session.VipUser }}'
+        if(!VipUser){
+            // 没有登录
+            alert('请先登录');
+            return;
+        }
+
+        // 获取商品id和商品数量
+        var gid = {{ id }}
+        var num = $('#J_quantity').val()
+        alert(gid)
+        // alert(num)
+
+        // 发送ajax请求
+        $.get('{% url 'myhome_cartadd' %}',{'gid':gid,'num':num},function(data){
+            alert(data['msg'])
+        },'json')
+        alert(num)
+
+
+    })
+</script>
 </body>
 </html>

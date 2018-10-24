@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from .views import viewsCates,viewsGoods,viewsIndex
+from .views import viewsCates,viewsGoods,viewsIndex, viewsCarts
 
 
 
@@ -47,6 +47,9 @@ urlpatterns = [
     url(r'^good/add/$',viewsGoods.good_add, name = 'myadmin_good_add'),
     url(r'^good/edit/(?P<pid>[0-9]+)/$',viewsGoods.good_edit, name = 'myadmin_good_edit'),
     url(r'^good/delete/(?P<pid>[0-9]+)/$',viewsGoods.good_delete, name = 'myadmin_good_delete'),
+
+    # 购物车添加
+    url(r'^cart/index/$',viewsCarts.cart_index,name = 'myadmin_cart_index'),
 
 
 

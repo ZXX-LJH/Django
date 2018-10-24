@@ -52,3 +52,10 @@ class Goods(models.Model):
     clicknum = models.IntegerField(default = 0)
     ordernum = models.IntegerField(default = 0)
     addtime = models.TimeField(auto_now_add = True)
+
+# 购物车
+class Cart(models.Model):
+    # id uid goodsid num
+    uid = models.ForeignKey(to="Users")
+    goodsid = models.ForeignKey(to="Goods")
+    num = models.IntegerField()
