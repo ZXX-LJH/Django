@@ -29,6 +29,20 @@ def list(request):
     print(goodid)
     print(sortid)
 
+    '''
+    [
+        'name':'点心/蛋糕',
+            'sub':[
+                'name':'点心','goodslist':[
+                        goodsobject,goodsobject
+                    ],
+                'name':'蛋糕','goodslist':[
+                        goodsobject,goodsobject
+                    ]
+                ],
+        'name':'饼干/膨化','sub':['name':'饼干','goodslist':[goodsobject,goodsobject],'name':'膨化','goodslist':[goodsobject,goodsobject]]
+    ]
+    '''
     # 获取所有的商品信息
     data1 = models.Goods.objects.all()  # 所有商品
     # 获取所有的标签
@@ -84,7 +98,6 @@ def list(request):
     context = {'goodslist':data1,'cateslist_one':data2, 'cateslist_two':data3, 'cateid':cateid,"goodid":goodid, 'sortid':sortid}
     return render(request, 'myhome/list.html', context)
     return render(request, 'myhome/list.html')
-
 # 登录页
 def login(request):
     if request.method == 'GET':
@@ -143,15 +156,33 @@ def cartadd(request):
 
     return JsonResponse({'error':0,'msg':'加入购物成功'})
 
-
 def order(request):
     return render(request, 'myhome/order.html')
 
 def myorder(request):
-    return render(request, 'myhome/myorder.html')
+    # 如果用户登录了
+    if request.session['VipUser']:
+        # request.session['VipUser'] = {'username':user.username, 'phone':user.phone, 'uid':user.id,'pic_url': user.pic_url}
+        # 通过用户手机号获得用户
+        user = models.Users.objects.filter(phone = request.session['VipUser']['phone'])
+        # print('user = ', user)
+        # 通过用户获得购物车中的数据
+        cart = models.Cart.objects.filter(uid = user)  # 外键  需要一个用户对象
+        
+        # 加载魔板
+        context = {'cart': cart}
+        # 返回数据
+        return render(request, 'myhome/myorder.html', context)
+# 计算购物的价格
+def countprice(request):
+    num = request.GET.get('num')
+    id = request.GET.get('id')
+    price = models.Goods.objects.get(id = int(id)).price
+    res = price * int(num)
+    return JsonResponse({'countprice':res})
 
+# 注册用户
 def register(request):
-
     if request.method == 'GET':
         return render(request, 'myhome/register.html')
     elif request.method == 'POST':
@@ -168,7 +199,7 @@ def register(request):
                 print(data)
                 # 实例化会员类
                 user = models.Users()
-                user.username = 'user' + data['phone']
+                user.username = 'user_' + data['phone']
                 user.password = make_password(data['password'], None, 'pbkdf2_sha256')
                 user.phone = data['phone']
                 # 写进数据库
@@ -178,6 +209,7 @@ def register(request):
                 return HttpResponse('<script>alert("注册成功");location.href="' + reverse('myhome_login') + '"</script>')
             else:
                 return HttpResponse('<script>alert("验证码输入错误");location.href="' + reverse('myhome_register') + '"</script>')
+# 检查手机是否存在
 def phone_check(request):
         phone = request.GET.get('phone')
         num = models.Users.objects.get(phone = phone)
