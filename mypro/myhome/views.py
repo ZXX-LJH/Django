@@ -157,7 +157,31 @@ def cartadd(request):
     return JsonResponse({'error':0,'msg':'加入购物成功'})
 
 def order(request):
-    return render(request, 'myhome/order.html')
+    # 接收 cartids
+    cartids = eval(request.GET.get('cartids'))  # 获得商品的编号  ['10', '8', '2', '3']
+    nums = eval(request.GET.get('nums'))  # 商品的购买数量
+
+    # 将cartids 中字符串转成 整形
+    for i in range(0, len(cartids)):
+        cartids[i] = int(cartids[i])
+    # print(cartids)
+
+    # 获取对应的购物车数据
+    for i in cartids:
+        good = models.Goods.objects.get(id = i) # 通过 商品编号获得 货物对象
+        # 通过货物对象 修改 购物车中的数量
+        cart = models.Cart.objects.get(goodsid = good)
+        cart.num = int(nums[cartids.index(i)])
+        cart.save()
+
+    # 获得商品标号对应的对象
+    data = models.Goods.objects.filter(id__in = cartids)
+    print(data)
+    # 分配数据
+    context = {'data':data}
+
+    return render(request,'myhome/order.html',context)
+
 
 def myorder(request):
     # 如果用户登录了
@@ -168,7 +192,7 @@ def myorder(request):
         # print('user = ', user)
         # 通过用户获得购物车中的数据
         cart = models.Cart.objects.filter(uid = user)  # 外键  需要一个用户对象
-        
+
         # 加载魔板
         context = {'cart': cart}
         # 返回数据
@@ -180,7 +204,6 @@ def countprice(request):
     price = models.Goods.objects.get(id = int(id)).price
     res = price * int(num)
     return JsonResponse({'countprice':res})
-
 # 注册用户
 def register(request):
     if request.method == 'GET':

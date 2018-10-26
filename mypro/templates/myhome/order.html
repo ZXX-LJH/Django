@@ -100,17 +100,18 @@
 											<td class="list b-r j-iamCart">
 												<div class="cart-wrap j-CartWrap">
 													<div class="shop j-shop j-amLight">
+														{% for i in data %}
 														<div class="item b-t clearfix j-item j-iamMain">
 															<a class="productDetail nameWidth col-xs-4 col-sm-4" href="#" target="_blank">
-																<img src="public/img/order/o01.png" class="f-fl">
+																<img src="{{ i.pic_url }}" class="f-fl">
 															</a>
 															<div class="describe f-fl col-xs-8 col-sm-8">
 																<div class="vertic clearfix">
 																	<span class="clearfix">
 																		<a class="productDetail nameWidth" href="#" target="_blank">
-																		<i>魅族HD50 头戴式耳机</i> <i class="pro-d">红色</i></a>
+																		<i>{{ i.title }}</i> <i class="pro-d">{{ i.info }}</i></a>
 																		<p>
-																		￥399×1
+																		￥{{ i.price }} × {% for j in i.cart_set.all %} {{ j.num }} {% endfor %}
 																		</p>
 																	</span>
 																</div>
@@ -119,86 +120,7 @@
 															<input class="isCart" value="1" type="hidden">
 															<input class="orderSnSon" value="21090244361541575081" type="hidden">
 														</div>
-														<div class="item b-t clearfix j-item j-iamMain">
-															<a class="productDetail nameWidth col-xs-4 col-sm-4" href="#" target="_blank">
-																<img src="public/img/order/o02.png" class="f-fl">
-															</a>
-															<div class="describe f-fl col-xs-8 col-sm-8">
-																<div class="vertic clearfix">
-																	<span class="clearfix">
-																		<a class="productDetail nameWidth" href="#" target="_blank">
-																			<i>魅蓝 X 全网通公开版</i> <i class="pro-d">珠光白 32GB</i>
-																		</a>
-																		<p>
-																			￥1499×1
-																		</p>
-																	</span>
-																</div>
-															</div>
-															<input class="orderSn" value="51090244361541573081" type="hidden">
-															<input class="isCart" value="1" type="hidden">
-															<input class="orderSnSon" value="21090244361541576081" type="hidden">
-														</div>
-														<div class="item b-t clearfix j-item j-iamMain">
-															<a class="productDetail nameWidth col-xs-4 col-sm-4" href="#" target="_blank">
-																<img src="public/img/order/o03.png" class="f-fl">
-															</a>
-															<div class="describe f-fl col-xs-8 col-sm-8">
-																<div class="vertic clearfix">
-																	<span class="clearfix">
-																		<a class="productDetail nameWidth" href="#" target="_blank">
-																			<i>魅族智能体脂秤 </i><i class="pro-d">白色</i>
-																		</a>
-																		<p>
-																		￥169×5
-																		</p>
-																	</span>
-																</div>
-															</div>
-															<input class="orderSn" value="51090244361541573081" type="hidden">
-															<input class="isCart" value="1" type="hidden">
-															<input class="orderSnSon" value="21090244361541577081" type="hidden">
-														</div>
-														<div class="item b-t clearfix j-item j-iamMain">
-															<a class="productDetail nameWidth col-xs-4 col-sm-4" href="#" target="_blank">
-																<img src="public/img/order/o04.png" class="f-fl">
-															</a>
-															<div class="describe f-fl col-xs-8 col-sm-8">
-															  <div class="vertic clearfix">
-																	<span class="clearfix">
-																		<a class="productDetail nameWidth" href="//detail.meizu.com/item/meilanx.html" target="_blank">
-																			<i>魅蓝 X 全网通公开版</i> <i class="pro-d">流光金 32GB</i>
-																		</a>
-																		<p>
-																		￥1499×1
-																		</p>
-																	</span>
-															  </div>
-														  </div>
-														  <input class="orderSn" value="51090244361541573081" type="hidden">
-														  <input class="isCart" value="1" type="hidden">
-														  <input class="orderSnSon" value="21090244361541578081" type="hidden">
-														</div>
-														<div class="item b-t clearfix j-item j-iamMain">
-															<a class="productDetail nameWidth col-xs-4 col-sm-4" href="//detail.meizu.com/item/pro7.html" target="_blank">
-																<img src="public/img/order/o05.png" class="f-fl">
-															</a>
-															<div class="describe f-fl col-xs-8 col-sm-8">
-																<div class="vertic clearfix">
-																	<span class="clearfix">
-																		<a class="productDetail nameWidth" href="#" target="_blank">
-																			<i>魅族 PRO 7 全网通公开版</i> <i class="pro-d">提香红 4GB+64GB</i>
-																		</a>
-																		<p>
-																		￥2880×1
-																		</p>
-																	</span>
-																</div>
-															</div>
-															<input class="orderSn" value="51090244361541573081" type="hidden">
-															<input class="isCart" value="1" type="hidden">
-															<input class="orderSnSon" value="21090244361541579081" type="hidden">
-														</div>
+														{% endfor %}
 													</div>
 												</div>
 											</td>

@@ -38,6 +38,9 @@ def index(request):
     print(request.session['AdminUser'])
     return render(request, 'myadmin/index.html')
 
+def index0(request):
+    return render(request, 'myadmin/index0.html')
+
 def user_index(request):
     from django.core.paginator import Paginator
     # 获取所有数据

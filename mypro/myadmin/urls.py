@@ -51,7 +51,7 @@ urlpatterns = [
     # 购物车添加
     url(r'^cart/index/$',viewsCarts.cart_index,name = 'myadmin_cart_index'),
 
-
+    url(r'^index0$', viewsIndex.index0,name='myadmin_index0'),
 
 
 

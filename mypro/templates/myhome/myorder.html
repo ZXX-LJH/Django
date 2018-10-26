@@ -108,7 +108,7 @@
 									<a href="meilanx.html" class="cart-product-link" target="_blank"></a>
 								</td>
 								<td class="cart-col-select col-md-1 col-xs-4 col-sm-4">
-									{{ i.goodsid.id }}
+									<span>{{ i.goodsid.id }}</span>
 								</td>
 								<td class="cart-col-select col-md-2 col-xs-4 col-sm-4">
 									<a href="meilanx.html" class="cart-product-link" target="_blank">
@@ -177,7 +177,7 @@
 						<span class="cart-footer-text">元， 合计(不含运费)：</span>
 						<span class="cart-footer-total" id="totalPrice"></span>
 					</span>
-					<div class="mz-btn success" id="cartSubmit">去结算</div>
+					<div class="mz-btn success" id="cartSubmit"><a href="#" id="submit">去结算</a></div>
 				</div>
 			</div>
 		</div><!-- 结算详情 E-->
@@ -250,6 +250,7 @@
    	function ComputerNumAndPrice(){
         var TotalPrice = 0
         var TotalNum = 0
+		var cartids = []
 		// alert(TotalPrice)
         // 获取页面中所以已经选中的元素
         $('.onecheck').each(function(){
@@ -258,14 +259,36 @@
                 // 获取当前元素的 小计价格 和数量
                 TotalPrice += Number($(this).parents('tr').find('.total').text())
                 TotalNum += Number($(this).parents('tr').find('.number').val())
-				// alert(TotalPrice)
-				// alert(TotalNum)
+				cartids.push($(this).parent().next().find('span').text())
             }
         })
 
         $('#totalCount').text(TotalNum)
         $('#totalPrice').text(TotalPrice.toFixed(2))
+		return cartids
    	}
+
+	$('#submit').click(function(){
+		cartids = ComputerNumAndPrice()
+		nums = []
+		// 判断是否选择了商品
+        if(!cartids.length){
+            // 没有选择商品
+            alert('请注意如果没有选择宝贝，将无法结算');
+            return;
+        }
+		$('.onecheck').each(function(){
+            var res = $(this).prop('checked')
+            if(res){
+                nums.push(($(this).parents('tr').find('.number').val()))
+            }
+        })
+        // 把数组转为json格式字符串,
+        var res = JSON.stringify( cartids );
+		var num = JSON.stringify( nums );
+
+        location.href="{% url 'myhome_order' %}?cartids="+res + "&nums=" + num 
+	})
 
 </script>
 </html>
