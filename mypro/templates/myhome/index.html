@@ -39,35 +39,6 @@
                 <img src="/static/myhome/img/logo.png">
               </a>
           </div>
-          <ul class="nav navbar-nav navbar-right layout-header-service clearfix">
-            <li class="layout-header-service-item" id="layoutHeaderUser">
-                <a class="layout-header-service-link g-user" href="#">
-                  <i class="glyphicon glyphicon-user"></i>
-                </a>
-                <div class="layout-user-downmenu">
-					<ul class="layout-user-downmenu-list">
-						<li class="layout-user-downmenu-item">
-							<a href="{% url 'myhome_login' %}" class="layout-user-downmenu-link">立即登录</a>
-						</li>
-						<li class="layout-user-downmenu-item">
-							<a href="{% url 'myhome_register' %}" target="_blank" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_register">立即注册</a>
-						</li>
-						<li class="layout-user-downmenu-item">
-							<a href="#" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_myorder">我的订单</a>
-						</li>
-						<li class="layout-user-downmenu-item">
-							<a href="#" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_mformy">M码通道</a>
-						</li>
-					</ul>
-                </div>
-            </li>
-            <li class="layout-header-service-item layout-header-service-cart" id="layoutHeaderCart">
-                <a class="layout-header-service-link" href="#" data-mtype="wmz_public_yt_cart">
-                    <i class="glyphicon glyphicon-shopping-cart"></i>
-                    <span class="layout-header-service-cart-num">0</span>
-                </a>
-            </li>
-          </ul>
           <ul class="nav navbar-nav navbar-right layout-header-nav clearfix">
             <li class="layout-header-nav-item">
               <a href="./index.html" class="layout-header-nav-link">魅族商城 </a><p class="line-top hidden-xs"></p>
@@ -82,6 +53,18 @@
             <li class="layout-header-nav-item"><a href="#" class="layout-header-nav-link">专卖店</a></li>
             <li class="layout-header-nav-item"><a href="#" class="layout-header-nav-link">Flyme</a></li>
             <li class="layout-header-nav-item"><a href="#" class="layout-header-nav-link">社区</a></li>
+			<li class="layout-header-nav-item">
+				<a href="{% url 'myhome_login' %}" class="layout-user-downmenu-link"> 登录 </a>
+			</li>
+			<li class="layout-header-nav-item">
+				<a href="{% url 'myhome_register' %}" target="_blank" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_register">注册</a>
+			</li>
+			<li class="layout-header-nav-item">
+				<a href="{% url 'myhome_logout' %}" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_myorder">退出</a>
+			</li>
+			<li class="layout-header-nav-item">
+				<a href="{% url 'myhome_myorder' %}" class="layout-user-downmenu-link" data-mtype="wmz_public_grzx_mformy">购物车</a>
+			</li>
           </ul>
         </div>
          <!-- /.navbar-collapse -->
@@ -224,7 +207,7 @@
 				{{ ii.name }}
 				</a>
 				{% for iii in  ii.goods_set.all %}
-				<a class="home-category-child-item" href="#" target="_blank" >
+				<a class="home-category-child-item" href="{% url 'myhome_meilanx' %}?id={{ iii.id }}" target="_blank" >
 				<img class="home-category-child-img" src="{{ iii.pic_url }}" height="40" width="40">
 				<div class="home-category-child-text">{{ iii.title }}</div>
 				</a>

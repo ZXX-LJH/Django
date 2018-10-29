@@ -22,9 +22,9 @@ def index(request):
     return render(request, 'myhome/index.html', context)
 # 前台列表页
 def list(request):
-    cateid = request.GET.get('catetype') # 一级分类提交的数据
-    goodid = request.GET.get('goodtype') # 二级分类提交的数据
-    sortid = request.GET.get('sorttype') # 搜索分类提交的数据
+    cateid = request.GET.get('catetype','') # 一级分类提交的数据
+    goodid = request.GET.get('goodtype', '') # 二级分类提交的数据
+    sortid = request.GET.get('sorttype', '') # 搜索分类提交的数据
     print(cateid)
     print(goodid)
     print(sortid)
@@ -121,6 +121,11 @@ def login(request):
         else:
             return HttpResponse('<script>alert("验证码错误");location.href="' + reverse('myhome_login') + '"</script>')
     # return HttpResponse('login')
+# 退出
+def logout(request):
+    request.session['VipUser'] = ''
+    print("退出成功")
+    return render(request, 'myhome/index.html')
 
 def cart(request):
     return render(request, 'myhome/cart.html')
@@ -158,8 +163,9 @@ def cartadd(request):
 
 def order(request):
     # 接收 cartids
-    cartids = eval(request.GET.get('cartids'))  # 获得商品的编号  ['10', '8', '2', '3']
+    cartids = eval(request.GET.get('cartids', '0'))  # 获得商品的编号  ['10', '8', '2', '3']
     nums = eval(request.GET.get('nums'))  # 商品的购买数量
+    totalPrice = request.GET.get('totalPrice', '0')
 
     # 将cartids 中字符串转成 整形
     for i in range(0, len(cartids)):
@@ -176,12 +182,80 @@ def order(request):
 
     # 获得商品标号对应的对象
     data = models.Goods.objects.filter(id__in = cartids)
-    print(data)
+    # print(models.Address.objects.filter(isChecked = True))  # <QuerySet []>
+    if models.Address.objects.filter(isChecked = True):
+        address = models.Address.objects.filter(isChecked = True)
+    else:
+        # 如果没有默认地址，则选择第一条数据
+        address = models.Address.objects.all()[0:1]
+
     # 分配数据
-    context = {'data':data}
+    print(address)
+    context = {'data':data, 'cartids':cartids, 'nums':nums, 'totalPrice':totalPrice, 'address':address}
 
     return render(request,'myhome/order.html',context)
 
+def address(request):
+    # username = request.session['VipUser']['username']  # 获得用户明
+    # print(username)
+    print('地址首页')
+    # 获取所有的地址信息
+    addinfo = models.Address.objects.all()
+    context = {'addinfo':addinfo}
+    return render(request, 'myhome/address.html', context)
+
+# 修改默认地址
+def set_def_address(request):
+    id = itn(request.GET.get('id'))
+    print('id = ', id)
+    return JsonResponse({'data':id})
+
+def add_address(request):
+    if request.method == 'GET':
+        return render(request, 'myhome/addaddress.html')
+    elif request.method == 'POST':
+        print('添加地址')
+        data = request.POST.dict()
+
+        username = request.session['VipUser']['username']
+        # print(username)
+        user = models.Users.objects.get(username = username)  # 获得用户
+
+        # 实例化地址对象
+        address = models.Address()
+        address.uid = user
+        address.shr = data['shr']
+        address.shdh = data['shdh']
+        address.sheng = data['sheng']
+        address.shi = data['shi']
+        address.xian = data['xian']
+        address.info = data['info']
+        address.idChecked = True
+        address.save()
+        return HttpResponse('<script>alert("添加地址成功");location.href="' + reverse('myhome_address') + '"</script>')
+
+def address_delete(request):
+    id = request.GET.get('id','0')  # 获取地址的id
+    print('删除地址')
+    address = models.Address.objects.filter(id = int(id))
+    address.delete()
+
+    # addinfo = models.Address.objects.all()
+    # context = {'addinfo':addinfo}
+    # return render(request, 'myhome/address.html', context)
+    return HttpResponse('<script>alert("删除成功");location.href="' + reverse('myhome_address') + '"</script>')
+
+def getcitys(request):
+    # 获取请求的id参数
+    upid = request.GET.get('id')
+    print(upid)
+    # values()：一个对象构成一个字典，然后构成一个列表返回
+    data = models.Citys.objects.filter(upid=upid).values()
+
+    # [object,object,object]
+
+    # [{},{},{}]
+    return JsonResponse(list(data),safe=False)
 
 def myorder(request):
     # 如果用户登录了
@@ -246,3 +320,26 @@ def phone_check(request):
 
 def member(request):
     return render(request, 'myhome/member.html')
+
+def dingdan(request):
+    username = request.session['VipUser']['username']  # 获得用户名
+    cartids = request.GET.get('cartids', 'none')  # 获得订单中货物的id
+    totalprice = request.GET.get('totalPrice')  # 获得总价格
+    shr = request.GET.get('shr')  #
+    shdh = request.GET.get('shdh')
+    sheng = request.GET.get('sheng')
+    shi = request.GET.get('shi')
+    xian = request.GET.get('xian')
+
+    # 实例化订单模型
+    dingdan = models.Order()
+
+    dingdan.uid = models.Users.objects.get(username = username)
+    dingdan.shr = shr
+    dingdan.shdh = shdh
+    dingdan.shdz = sheng + ' >> ' + shi + ' >> ' + xian
+    dingdan.totalprice = totalprice
+
+    dingdan.save()
+
+    return HttpResponse('dingdan')

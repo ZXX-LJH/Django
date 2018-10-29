@@ -1018,22 +1018,21 @@
         if(!VipUser){
             // 没有登录
             alert('请先登录');
+            location.href = "{% url 'myhome_login' %}?"
             return;
         }
 
         // 获取商品id和商品数量
         var gid = {{ id }}
         var num = $('#J_quantity').val()
-        alert(gid)
+        // alert(gid)
         // alert(num)
 
         // 发送ajax请求
         $.get('{% url 'myhome_cartadd' %}',{'gid':gid,'num':num},function(data){
             alert(data['msg'])
+            location.href = " {% url 'myhome_myorder' %}"
         },'json')
-        alert(num)
-
-
     })
 </script>
 </body>

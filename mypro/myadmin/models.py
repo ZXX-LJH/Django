@@ -40,9 +40,7 @@ class Cates(models.Model):
 # 商品表
 class Goods(models.Model):
     title = models.CharField(max_length = 255)
-
     cateid = models.ForeignKey(to = 'Cates')
-
     price = models.FloatField()
     store = models.IntegerField()
     info = models.TextField()
@@ -59,3 +57,56 @@ class Cart(models.Model):
     uid = models.ForeignKey(to="Users")
     goodsid = models.ForeignKey(to="Goods")
     num = models.IntegerField()
+
+# 收货地址模型
+class Address(models.Model):
+    uid = models.ForeignKey(to="Users")
+    shr = models.CharField(max_length=50)
+    shdh = models.CharField(max_length=11)
+    sheng = models.IntegerField()
+    shi = models.IntegerField()
+    xian = models.IntegerField()
+    # zhen = models.IntegerField(null=True)
+    info = models.CharField(max_length=100)
+    isChecked = models.BooleanField(default=False)
+
+# 城市数据模型
+class Citys(models.Model):
+    name = models.CharField(max_length=50)
+    level = models.IntegerField()
+    upid = models.IntegerField()
+
+# 订单
+class Order(models.Model):
+    uid = models.ForeignKey(to="Users")
+    shr = models.CharField(max_length=50)
+    shdh = models.CharField(max_length=11)
+    shdz = models.CharField(max_length=100)
+    buytype = models.CharField(max_length=10)
+    wl = models.CharField(max_length=10)  # 物流
+    totalprice = models.FloatField()
+    addtime = models.DateTimeField(auto_now_add=True)
+    buytime = models.DateTimeField(null=True)
+    # 0 新订单  1 已支付  2,已发货  3,已收货
+    status = models.IntegerField(default=0)
+'''
+   id uid   收货人  电话号  地址 totalprice  支付方式,快递,订单创建时间,订单支付时间,状态( 0 新订单  1 支付  2发货 )
+    101  993  2        1000
+'''
+
+# 订单详情
+class OrderInfo(models.Model):
+    orderid = models.ForeignKey(to="Order")
+    goodsid = models.IntegerField()
+    title = models.CharField(max_length=255)
+    price = models.FloatField()
+    pic_url = models.CharField(max_length=100)
+    num = models.IntegerField()
+
+'''
+    id   orderid  goodsid  num price pic_url title
+        101        2       1     500
+        101        3       1     500
+
+
+'''
