@@ -100,6 +100,7 @@ def list(request):
     return render(request, 'myhome/list.html')
 # 登录页
 def login(request):
+
     if request.method == 'GET':
         return render(request, 'myhome/login.html')
     elif request.method == 'POST':
@@ -123,10 +124,12 @@ def login(request):
     # return HttpResponse('login')
 # 退出
 def logout(request):
-    request.session['VipUser'] = ''
-    print("退出成功")
-    return render(request, 'myhome/index.html')
-
+    if request.session['VipUser']:
+        request.session['VipUser'] = ''
+        print("退出成功")
+        return HttpResponse('<script>alert("退出登录");location.href="' + reverse('myhome_index') + '"</script>')
+    else:
+        return HttpResponse('<script>alert("早已退出登录");location.href="' + reverse('myhome_index') + '"</script>')
 def cart(request):
     return render(request, 'myhome/cart.html')
 
@@ -162,15 +165,20 @@ def cartadd(request):
     return JsonResponse({'error':0,'msg':'加入购物成功'})
 
 def order(request):
+    # 是否登录
+    if request.session['VipUser']:
+        pass
+    else:
+        return HttpResponse('<script>alert("请先登录");location.href="' + reverse('myhome_login') + '"</script>')
+
     # 接收 cartids
-    cartids = eval(request.GET.get('cartids', '0'))  # 获得商品的编号  ['10', '8', '2', '3']
+    cartids = eval(request.GET.get('cartids'))  # 获得商品的编号  ['10', '8', '2', '3']
     nums = eval(request.GET.get('nums'))  # 商品的购买数量
-    totalPrice = request.GET.get('totalPrice', '0')
+    totalPrice = request.GET.get('totalPrice')
 
     # 将cartids 中字符串转成 整形
     for i in range(0, len(cartids)):
         cartids[i] = int(cartids[i])
-    # print(cartids)
 
     # 获取对应的购物车数据
     for i in cartids:
@@ -188,11 +196,9 @@ def order(request):
     else:
         # 如果没有默认地址，则选择第一条数据
         address = models.Address.objects.all()[0:1]
-
     # 分配数据
     print(address)
     context = {'data':data, 'cartids':cartids, 'nums':nums, 'totalPrice':totalPrice, 'address':address}
-
     return render(request,'myhome/order.html',context)
 
 def address(request):
@@ -203,11 +209,23 @@ def address(request):
     addinfo = models.Address.objects.all()
     context = {'addinfo':addinfo}
     return render(request, 'myhome/address.html', context)
-
 # 修改默认地址
 def set_def_address(request):
-    id = itn(request.GET.get('id'))
+    id = int(request.GET.get('id'))
     print('id = ', id)
+
+    # 修改之前的默认地址
+    address = models.Address.objects.get(isChecked = True)
+    print(address.isChecked, '*******')
+    address.isChecked = False
+    print(address.isChecked, '*******')
+    address.save()
+
+    # 将提交的ｉｄ作为默认
+    address = models.Address.objects.get(id = id)
+    address.isChecked = True
+    address.save()
+
     return JsonResponse({'data':id})
 
 def add_address(request):
@@ -271,11 +289,20 @@ def myorder(request):
         context = {'cart': cart}
         # 返回数据
         return render(request, 'myhome/myorder.html', context)
+    else:
+        return HttpResponse('<script>alert("请先登录");location.href="' + reverse('myhome_login') + '"</script>')
 # 计算购物的价格
 def countprice(request):
-    num = request.GET.get('num')
-    id = request.GET.get('id')
-    price = models.Goods.objects.get(id = int(id)).price
+    id = request.GET.get('id') # 商品号
+    num = request.GET.get('num')  # 商品数量
+    good = models.Goods.objects.get(id = int(id))
+
+    # 修改购物车中的数量
+    cart = models.Cart.objects.get(goodsid = good)
+    cart.num = int(num)
+    cart.save()
+
+    price = good.price
     res = price * int(num)
     return JsonResponse({'countprice':res})
 # 注册用户
@@ -320,10 +347,43 @@ def phone_check(request):
 
 def member(request):
     return render(request, 'myhome/member.html')
-
+# 订单首页
 def dingdan(request):
+    # 是否登录
+    if request.session['VipUser']:
+        pass
+    else:
+        return HttpResponse('<script>alert("请先登录");location.href="' + reverse('myhome_login') + '"</script>')
+
+    # print(request.path)
+    # if request.path == '/myhome/dingdan/':
+    #     # username = request.session['VipUser']['username']
+    #     # user = models.Users.objects.get(username = username)
+    #     # dingdan = models.Order.models.filter(uid = user)
+    #     # context = {'dingdan': dingdan}
+    #     # return render(request, 'myhome/member.html', context)
+    #     return HttpResponse('换个方式访问')
+
+
+    # 存在重复提交的情况
+    cartids = request.GET.get('cartids', '0')  # 获得订单中货物的id
+    # 通过 提交的 cartids 去查看购物车虫检测是否还存在数据 (取一个id 就行了)
+    print(cartids, len(cartids))  # 1,4,7 5
     username = request.session['VipUser']['username']  # 获得用户名
-    cartids = request.GET.get('cartids', 'none')  # 获得订单中货物的id
+    user = models.Users.objects.get(username = username)  # 用户
+
+    # try: # 购物车中不存在某商品 则说明重复提交
+    #     check = models.Cart.objects.get(id = int(cartids[0]))
+    # except:
+    #     # 获取订单
+    #     order = models.Order.objects.filter(uid = user)  # 多条数据
+    #     # 获取订单详情
+    #     orderinfo = models.OrderInfo.objects.filter(orderid__in = order)
+    #     # print(orderinfo, len(orderinfo))
+    #     context = {'dingdan': order, "dingdaninfo":orderinfo}
+    #     return render(request, 'myhome/dingdan.html', context)
+
+    # dingdan
     totalprice = request.GET.get('totalPrice')  # 获得总价格
     shr = request.GET.get('shr')  #
     shdh = request.GET.get('shdh')
@@ -333,13 +393,97 @@ def dingdan(request):
 
     # 实例化订单模型
     dingdan = models.Order()
-
-    dingdan.uid = models.Users.objects.get(username = username)
+    dingdan.uid = user
     dingdan.shr = shr
     dingdan.shdh = shdh
     dingdan.shdz = sheng + ' >> ' + shi + ' >> ' + xian
     dingdan.totalprice = totalprice
-
     dingdan.save()
 
-    return HttpResponse('dingdan')
+    order = models.Order.objects.last()
+    # print(cartids, len(cartidss))  # 1,4,7 5
+
+    for id in cartids.split(','):  # 注意是字符串
+        # 实例化订单详情
+        dingdaninfo = models.OrderInfo()
+        # 获得购物车数据
+        good = models.Goods.objects.get(id = int(id))
+        cart = models.Cart.objects.get(goodsid = good)
+        # 通过 id 获得商品
+        print(id, type(id), type(int(id)))
+        good = models.Goods.objects.filter(id = int(id))  # 查询集
+        for j in good:
+            price = j.price  # 获得商品价格
+            pic_url = j.pic_url  # 获得商品图片
+            print(price)
+
+        # 通过商品获得购物车
+        cart = models.Cart.objects.filter(goodsid = good)
+        for j in cart:
+            # 获取购物车数据中的数量
+            num = j.num
+            print(num)
+            # 修改购物车中的数据 ( 数量 )
+            print(j.num, '******************')
+            j.num -= num
+            # 如果购物车中的数量小于等于0 则删除购物车中的数据
+            if j.num <= 0:
+                j.delete()
+
+        dingdaninfo.orderid = order
+        dingdaninfo.goodsid = id
+        dingdaninfo.price = price
+        dingdaninfo.num = num
+        dingdaninfo.pic_url = pic_url
+
+        # 循环保存
+        dingdaninfo.save()
+        return HttpResponse('<script>location.href="' + reverse('myhome_dingdaninfo') + '"</script>')
+
+def dingdaninfo(request):
+    username = request.session['VipUser']['username']  # 获得用户名
+    user = models.Users.objects.get(username = username)  # 用户
+    # 为什么不用 all 这里是获得当前用户的数据  而不是所有用户的数据  前台列表
+    # 获取订单
+    order = models.Order.objects.filter(uid = user)  # 多条数据
+    # 获取订单详情
+    orderinfo = models.OrderInfo.objects.filter(orderid__in = order)
+    # print(orderinfo, len(orderinfo))
+    context = {'dingdan': order, "dingdaninfo":orderinfo}
+    return render(request, 'myhome/dingdan.html', context)
+
+def dingdan_delete(request):
+    id = request.GET.get('id')
+    print(id, type(id))
+    dingdan = models.OrderInfo.objects.get(id = int(id))
+    dingdan.delete()
+    return HttpResponse('<script>alert("订单删除成功");location.href="' + reverse('myhome_dingdaninfo') + '"</script>')
+
+def userinfo(request):
+    if request.method == 'POST':
+        data = request.POST.dict()
+        print(data)
+
+        username = request.session['VipUser']['username']
+        user = models.Users.objects.get(username = username)
+
+        user.username = data['username']
+        user.phone = data['phone']
+        user.sex = data['sex']
+        user.age = data['age']
+        user.email = data['email']
+        user.save()
+        return HttpResponse('<script>alert("修改个人信息成功");location.href="' + reverse('myhome_userinfo') + '"</script>')
+
+
+    # 是否登录
+    if request.session['VipUser']:
+        pass
+    else:
+        return HttpResponse('<script>alert("请先登录");location.href="' + reverse('myhome_login') + '"</script>')
+
+    # 活儿用户名
+    username = request.session['VipUser']['username']
+    user = models.Users.objects.filter(username = username)
+    context = {'user':user}
+    return render(request, 'myhome/userinfo.html', context)

@@ -53,7 +53,8 @@ def good_index(request):
 
 def good_add(request):
     if request.method == "GET":
-        data = models.Cates.objects.all()
+        # data = models.Cates.objects.all()
+        data = models.Cates.objects.extra(select={'paths': 'concat(path,id)'}).order_by('paths') # 可以封装成函数
         return render(request,'myadmin/goods/add.html',{'cateslist':data})
 
     elif request.method == "POST":
@@ -121,12 +122,12 @@ def good_edit(request, pid):
 
 def good_delete(request, pid):
     # 物理删除
-    # data = models.Goods.objects.get(id = pid)
-    # data.delete()
+    data = models.Goods.objects.get(id = pid)
+    data.delete()
 
     #　逻辑删除
-    data = models.Goods.objects.get(id = pid)
-    data.status = 2
-    data.save()
+    # data = models.Goods.objects.get(id = pid)
+    # data.status = 2
+    # data.save()
 
     return HttpResponse('<script>alert("删除成功");location.href="' + reverse('myadmin_good_index') + '"</script>')

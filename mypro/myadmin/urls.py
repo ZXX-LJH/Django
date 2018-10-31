@@ -51,7 +51,10 @@ urlpatterns = [
     # 购物车添加
     url(r'^cart/index/$',viewsCarts.cart_index,name = 'myadmin_cart_index'),
 
-    url(r'^index0$', viewsIndex.index0,name='myadmin_index0'),
+    # 订单
+    url(r'^dingdan/index/$', viewsCarts.dingdan_index, name = 'myadmin_dingdan_index'),
+    url(r'^dingdan/info/$', viewsCarts.dingdan_info, name = 'myadmin_dingdan_info'),
+    url(r'^dingdan/edit/(?P<uid>[0-9]+)/$', viewsCarts.dingdan_edit, name='myadmin_dingdan_edit'),
 
 
 

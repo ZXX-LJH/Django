@@ -324,7 +324,7 @@
 
 
 		$('#dingdan').click(function(){
-			// alert({{ cartids }})
+			alert("购买成功")
 			location.href="{% url 'myhome_dingdan' %}?cartids=" + {{ cartids }} + "&totalPrice=" + {{ totalPrice }} + "&shr=" +  shr  + "&shdh=" +  shdh  + "&sheng=" +  sheng  + "&shi=" +  shi  + "&xian=" +  xian
 		})
 

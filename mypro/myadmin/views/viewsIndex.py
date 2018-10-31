@@ -154,10 +154,7 @@ def user_index_edit(request, uid):
     user.email = data['email']
     user.age = data['age']
     user.sex = data['sex']
-    print('sssssssssssssssssssssssss')
-    print(user.pic_url)
-    print('sssssssssssssssssssssssss')
-
+    user.status = data['status']
     # 头像
     myfile = request.FILES.get('pic_url')
     if myfile:

@@ -21,5 +21,9 @@ class AdminLoginMiddleware:
                 return HttpResponse('<script>alert("请先登录");location.href="/myadmin/login";</script>')
 
 
+
+
+
+
         response = self.get_response(request)
         return response

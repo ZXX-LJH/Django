@@ -155,10 +155,10 @@
 		<div class="cart-footer" id="cartFooter">
 			<div class="container">
 			   <div class="cart-footer-left col-md-6 col-xs-4 col-sm-4">
-				   <div class="cart-select-all JSelectAll">
+				   <!-- <div class="cart-select-all JSelectAll">
 					   <input class="mz-checkbox" type="checkbox" name="" id = "nocheck" value="" onclick="style = checked">
 					   <span class="cart-select-title">全不选</span>
-				   </div>
+				   </div> -->
 				   <div class="cart-select-all JSelectAll">
 					   <input class="mz-checkbox" type="checkbox" name="" id = "fancheck" value="" onclick="style = checked">
 					   <span class="cart-select-title">反选</span>
@@ -177,8 +177,12 @@
 						<span class="cart-footer-text">元， 合计(不含运费)：</span>
 						<span class="cart-footer-total" id="totalPrice"></span>
 					</span>
-					<div class="mz-btn success" id="cartSubmit"><a href="#" id="submit">去结算</a></div>
+
 				</div>
+				<div class="mz-btn success" id="cartSubmit"><a href="#" id="submit">提交订单</a></div>
+				<div class="mz-btn success" ><a href="{% url "myhome_list" %}" id="changenum">继续购买</a></div>
+				<div class="mz-btn success" ><a href="{% url "myhome_index" %}" id="changenum">返回首页</a></div>
+
 			</div>
 		</div><!-- 结算详情 E-->
 	</div>
@@ -230,6 +234,7 @@
 		}
 		else{
 			$(this).next().find('input').val(num - 1)
+			// ComputerNumAndPrice()
 			// 发送ajax请求
 			$.get('{% url "myhome_countprice" %}',{'num':num - 1,'id': id},function(data){
 				th.parents('td').next().find('span').text(data['countprice'])
@@ -288,7 +293,11 @@
 		var num = JSON.stringify( nums );
 
 		var totalPrice = $('#totalPrice').text()
-        location.href="{% url 'myhome_order' %}?cartids="+res + "&nums=" + num + "&totalPrice=" + totalPrice 
+        location.href="{% url 'myhome_order' %}?cartids="+res + "&nums=" + num + "&totalPrice=" + totalPrice
+	})
+
+	$('#changenum').click(function(){
+
 	})
 
 </script>

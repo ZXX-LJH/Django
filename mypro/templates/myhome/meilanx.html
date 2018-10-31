@@ -364,9 +364,11 @@
                 </dd>
             </dl>
             <div class="property-buy-action">
-                <a data-mtype="store_de_buy" href="javascript:void(0);" id="J_btnBuy" class="btn btn-danger btn-lg mr20">立即购买</a>
-                <a data-mtype="store_de_cart" href="javascript:void(0);" id="J_btnAddCart" class="btn btn-primary btn-lg hide" style="display:inline-block;"><i></i>加入购物车</a>
-                <span class="vm-service" id="J_panicBuyingWrap"></span>
+                <a data-mtype="store_de_buy" href="javascript:void(0);" id="J_btnBuy" class="btn btn-danger btn-lg mr20">加入购物车</a>
+                <a data-mtype="store_de_buy" href="{% url 'myhome_list' %}" id="J_btnShopping" class="btn btn-danger btn-lg mr20">继续购物 </a>
+                <a data-mtype="store_de_buy" href="{% url 'myhome_myorder' %}" id="J_btnToOrder" class="btn btn-danger btn-lg mr20">结算 </a>
+                <a data-mtype="store_de_buy" href="{% url 'myhome_index' %}" id="J_btnIndex" class="btn btn-danger btn-lg mr20">返回首页 </a>
+
             </div>
           </div>
           <div class="prod-addition">
@@ -1014,6 +1016,19 @@
     <script>
     $('#J_btnBuy').click(function(){
         //判断是否登录
+        loginYorN()
+        // 获取商品id和商品数量
+        var gid = {{ id }}
+        var num = $('#J_quantity').val()
+        // 发送ajax请求
+        $.get('{% url 'myhome_cartadd' %}',{'gid':gid,'num':num},function(data){
+            alert(data['msg'])
+        },'json')
+    })
+    $('#J_btnToOrder').click(function(){
+        loginYorN()
+    })
+    function loginYorN(){
         var VipUser = '{{ request.session.VipUser }}'
         if(!VipUser){
             // 没有登录
@@ -1021,19 +1036,9 @@
             location.href = "{% url 'myhome_login' %}?"
             return;
         }
+    }
 
-        // 获取商品id和商品数量
-        var gid = {{ id }}
-        var num = $('#J_quantity').val()
-        // alert(gid)
-        // alert(num)
 
-        // 发送ajax请求
-        $.get('{% url 'myhome_cartadd' %}',{'gid':gid,'num':num},function(data){
-            alert(data['msg'])
-            location.href = " {% url 'myhome_myorder' %}"
-        },'json')
-    })
 </script>
 </body>
 </html>
